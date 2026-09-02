@@ -2,17 +2,9 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import {
-  Video,
-  VideoOff,
-  Sparkles,
-  Volume2,
-  CheckCircle2,
   Cpu,
-  RefreshCw,
-  Zap,
-  Globe2,
-  Smile,
-  Hand
+  Volume2,
+  Zap
 } from "lucide-react";
 
 interface Prediction {
@@ -75,11 +67,29 @@ const SIGN_METADATA: Record<
   }
 };
 
+// CDN Script Loader Helper
+function loadScript(src: string): Promise<void> {
+  return new Promise((resolve) => {
+    if (typeof document === "undefined") {
+      resolve();
+      return;
+    }
+    if (document.querySelector(`script[src="${src}"]`)) {
+      resolve();
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = src;
+    script.crossOrigin = "anonymous";
+    script.onload = () => resolve();
+    script.onerror = () => resolve(); // Non-blocking fallback
+    document.body.appendChild(script);
+  });
+}
+
 export default function TeachableSignRecognizer({
-  onSignDetected,
-  activeTargetSign
+  onSignDetected
 }: TeachableSignRecognizerProps) {
-  const [modelLoading, setModelLoading] = useState(true);
   const [modelLoaded, setModelLoaded] = useState(false);
   const [cameraActive, setCameraActive] = useState(false);
   const [predictions, setPredictions] = useState<Prediction[]>([
@@ -109,41 +119,41 @@ export default function TeachableSignRecognizer({
     }
   };
 
-  // 1. INITIALIZE TEACHABLE MACHINE MODEL
+  // 1. DYNAMICALLY LOAD TEACHABLE MACHINE VIA CDN
   useEffect(() => {
     let isCancelled = false;
 
-    async function loadModel() {
+    async function loadTeachableModel() {
       try {
-        setModelLoading(true);
-        // Dynamic import of teachable machine image library
-        const tmImage = await import("@teachablemachine/image");
-        const modelURL = MODEL_URL + "model.json";
-        const metadataURL = MODEL_URL + "metadata.json";
+        await loadScript("https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.18.0/dist/tf.min.js");
+        await loadScript("https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.5/dist/teachablemachine-image.min.js");
 
-        const loadedModel = await tmImage.load(modelURL, metadataURL);
-        if (!isCancelled) {
-          modelRef.current = loadedModel;
-          setModelLoaded(true);
-          setModelLoading(false);
+        if (typeof window !== "undefined" && (window as any).tmImage) {
+          const modelURL = MODEL_URL + "model.json";
+          const metadataURL = MODEL_URL + "metadata.json";
+          const loaded = await (window as any).tmImage.load(modelURL, metadataURL);
+          if (!isCancelled) {
+            modelRef.current = loaded;
+            setModelLoaded(true);
+          }
+        } else {
+          // Enable simulated prediction mode if CDN is blocked
+          if (!isCancelled) setModelLoaded(true);
         }
       } catch (err) {
-        console.log("Teachable machine model load fallback:", err);
-        if (!isCancelled) {
-          setModelLoading(false);
-          setModelLoaded(true); // Enable simulated/test mode
-        }
+        console.log("Teachable Machine fallback to simulator:", err);
+        if (!isCancelled) setModelLoaded(true);
       }
     }
 
-    loadModel();
+    loadTeachableModel();
 
     return () => {
       isCancelled = true;
     };
   }, []);
 
-  // 2. INITIALIZE WEBCAM & CONTINUOUS INFERENCE
+  // 2. WEBCAM INITIALIZATION
   useEffect(() => {
     let stream: MediaStream | null = null;
 
@@ -158,7 +168,7 @@ export default function TeachableSignRecognizer({
           }
         })
         .catch((err) => {
-          console.log("Webcam access graceful fallback:", err);
+          console.log("Webcam access fallback:", err);
           setCameraActive(false);
         });
     }
@@ -188,7 +198,6 @@ export default function TeachableSignRecognizer({
           if (preds && preds.length > 0) {
             setPredictions(preds);
 
-            // Find top prediction
             let highest = preds[0];
             for (let i = 1; i < preds.length; i++) {
               if (preds[i].probability > highest.probability) {
@@ -200,7 +209,6 @@ export default function TeachableSignRecognizer({
             const conf = Math.round(highest.probability * 100);
             setTopConfidence(conf);
 
-            // Trigger sign event if confidence > 70% and different from last
             if (highest.probability > 0.7 && highest.className !== "Nuetral") {
               if (highest.className !== lastAnnouncedSign) {
                 setLastAnnouncedSign(highest.className);
@@ -215,7 +223,7 @@ export default function TeachableSignRecognizer({
             }
           }
         } catch (e) {
-          // Graceful handling of prediction cycle
+          // Graceful handling
         }
       }
 
