@@ -261,85 +261,130 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#070b14] text-slate-100 flex flex-col font-sans selection:bg-teal-400 selection:text-black">
       {/* ========================================================================= */}
-      {/* 🚀 HIGH-TECH GLASSMORPHIC HEADER                                          */}
+      {/* HEADER                                                                    */}
       {/* ========================================================================= */}
-      <header className="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl px-6 py-3 sticky top-0 z-50 flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-teal-500 via-cyan-400 to-indigo-500 p-[1.5px] shadow-lg shadow-teal-500/20">
-            <div className="h-full w-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-              <Cpu className="w-5 h-5 text-teal-400" />
+      <header className="border-b border-slate-800/80 bg-[#070b14]/95 backdrop-blur-xl px-6 py-4 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+
+          {/* Brand */}
+          <div className="flex items-center gap-4">
+            {/* Logo mark */}
+            <div className="h-10 w-10 rounded-2xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center flex-shrink-0">
+              <span className="text-teal-400 font-black text-lg leading-none">સ</span>
+            </div>
+
+            <div>
+              <div className="flex items-center gap-2.5">
+                <span className="font-black text-xl tracking-tight text-white">
+                  SamjanSetu
+                </span>
+                <span className="hidden sm:inline text-[10px] font-bold px-2 py-0.5 rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/25">
+                  Beta
+                </span>
+              </div>
+              <p className="text-[12px] text-slate-400 leading-tight mt-0.5">
+                Every student deserves to understand.
+              </p>
             </div>
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-black text-lg tracking-tight bg-gradient-to-r from-teal-300 via-cyan-200 to-indigo-300 bg-clip-text text-transparent">
-                SamjanSetu
-              </span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-teal-500/10 text-teal-300 border border-teal-500/30 font-bold">
-                ISL-v2.4 ENGINE
-              </span>
-            </div>
-            <p className="text-[11px] text-slate-400">
-              સમજણ સેતુ • Bilingual Gujarati-ISL Adaptive Pedagogical Platform
-            </p>
+
+          {/* Centre: Tab Navigation */}
+          <div className="flex bg-slate-900/70 p-1 rounded-xl border border-slate-800">
+            {[
+              { id: "study",     label: "Live Classroom",   icon: BookOpen },
+              { id: "testing",   label: "Student Assessment", icon: Brain },
+              { id: "analytics", label: "Teacher Dashboard",  icon: Activity }
+            ].map((tab) => {
+              const Icon = tab.icon;
+              const isSel = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as any)}
+                  className={`px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                    isSel
+                      ? "bg-teal-500 text-slate-950 shadow-sm"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                  {tab.label}
+                </button>
+              );
+            })}
           </div>
-        </div>
 
-        {/* Tab Selector */}
-        <div className="flex bg-slate-900/90 p-1 rounded-xl border border-slate-800 shadow-inner">
-          {[
-            { id: "study", label: "1. Kinematic Classroom", icon: BookOpen },
-            { id: "testing", label: "2. Adaptive BKT Engine", icon: Brain },
-            { id: "analytics", label: "3. Classroom Heatmap", icon: Activity }
-          ].map((tab) => {
-            const Icon = tab.icon;
-            const isSel = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
-                className={`px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 transition-all ${
-                  isSel
-                    ? "bg-gradient-to-r from-teal-500 to-emerald-500 text-slate-950 shadow-md shadow-teal-500/20"
-                    : "text-slate-400 hover:text-white"
-                }`}
-              >
-                <Icon className="w-3.5 h-3.5" />
-                {tab.label}
-              </button>
-            );
-          })}
-        </div>
+          {/* Right: CTAs + Demo Scenario */}
+          <div className="flex items-center gap-3">
+            {/* Primary CTA */}
+            <button
+              onClick={() => setActiveTab("study")}
+              className="px-4 py-2 bg-teal-500 hover:bg-teal-400 text-slate-950 rounded-xl text-xs font-bold transition-colors shadow-sm shadow-teal-500/20 flex items-center gap-1.5"
+            >
+              ▶ Start Live Class
+            </button>
 
-        {/* Judge Live Scenario Trigger */}
-        <div className="flex items-center gap-2 bg-slate-900/90 border border-slate-700/80 px-3 py-1.5 rounded-xl text-xs">
-          <span className="text-slate-400 font-bold flex items-center gap-1.5">
-            <Gauge className="w-3.5 h-3.5 text-teal-400" /> Judge HUD:
-          </span>
-          <button
-            onClick={() => {
-              setLatencySec(2);
-              setErrorCount(0);
-              setBreakdownActive(false);
-              setAvatarSpeed(1.0);
-            }}
-            className="px-2.5 py-1 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 rounded-md font-semibold text-[11px]"
-          >
-            ✓ Fast Learner
-          </button>
-          <button
-            onClick={() => {
-              setLatencySec(9);
-              setErrorCount(2);
-              setAttemptCount(3);
-              triggerAdaptiveBreakdown();
-            }}
-            className="px-2.5 py-1 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/40 rounded-md font-semibold text-[11px] animate-pulse"
-          >
-            ⚠️ Struggle Scenario
-          </button>
+            {/* Secondary CTA */}
+            <button
+              onClick={() => setActiveTab("testing")}
+              className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-xl text-xs font-semibold transition-colors"
+            >
+              Explore Demo
+            </button>
+
+            {/* Demo Scenario Selector — intentional, not a debug control */}
+            <div className="hidden lg:flex flex-col items-end">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                Demo Scenario
+              </span>
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={() => {
+                    setLatencySec(2);
+                    setErrorCount(0);
+                    setBreakdownActive(false);
+                    setAvatarSpeed(1.0);
+                  }}
+                  className="px-3 py-1 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-lg text-[11px] font-semibold transition-all"
+                >
+                  Fast Learner
+                </button>
+                <button
+                  onClick={() => {
+                    setLatencySec(9);
+                    setErrorCount(2);
+                    setAttemptCount(3);
+                    triggerAdaptiveBreakdown();
+                  }}
+                  className="px-3 py-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 rounded-lg text-[11px] font-semibold transition-all"
+                >
+                  Needs Support
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </header>
+
+
+      {/* ========================================================================= */}
+      {/* PRODUCT STORY STRIP                                                       */}
+      {/* ========================================================================= */}
+      <div className="border-b border-slate-800/50 bg-slate-950/40 px-6 py-3">
+        <div className="max-w-7xl mx-auto flex items-center justify-center gap-2 text-[11px] font-semibold flex-wrap">
+          <span className="text-slate-300">Teacher speaks</span>
+          <span className="text-slate-600">→</span>
+          <span className="text-indigo-400">AI understands</span>
+          <span className="text-slate-600">→</span>
+          <span className="text-teal-400">Gujarati text</span>
+          <span className="text-slate-600">→</span>
+          <span className="text-cyan-400">Indian Sign Language</span>
+          <span className="text-slate-600">→</span>
+          <span className="text-emerald-400">Student understands</span>
+          <span className="text-slate-600">→</span>
+          <span className="text-amber-400">AI adapts to each learner</span>
+        </div>
+      </div>
 
       {/* ========================================================================= */}
       {/* 🌟 MAIN APP CONTENT                                                       */}
@@ -353,20 +398,25 @@ export default function Home() {
                 <div className="flex items-center justify-between pb-3 border-b border-slate-800">
                   <div className="flex items-center gap-2">
                     <Radio className="w-4 h-4 text-indigo-400 animate-pulse" />
-                    <h2 className="font-bold text-sm text-slate-100">
-                      Bhasha-Setu NLP Translation Core
-                    </h2>
+                    <div>
+                      <h2 className="font-bold text-sm text-slate-100">
+                        AI Speech Translation
+                      </h2>
+                      <p className="text-[11px] text-slate-500 mt-0.5">
+                        Teacher speaks — students receive in Gujarati & ISL
+                      </p>
+                    </div>
                   </div>
-                  <span className="text-[10px] font-mono px-2 py-0.5 bg-indigo-950 text-indigo-300 border border-indigo-800 rounded-full font-bold">
-                    EN ──► GU ──► ISL GLOSS
+                  <span className="text-[10px] font-mono px-2 py-0.5 bg-indigo-950/60 text-indigo-300 border border-indigo-800/50 rounded-full font-bold">
+                    EN → GU → ISL
                   </span>
                 </div>
 
                 {/* Editable Speech Input */}
                 <div className="bg-slate-950/90 p-4 rounded-xl border border-slate-800 space-y-2">
                   <div className="flex justify-between items-center text-[10px] uppercase tracking-wider text-slate-400 font-bold">
-                    <span>Teacher Spoken English</span>
-                    <span className="text-teal-400 font-mono">16kHz Acoustic Stream</span>
+                    <span>Teacher's spoken sentence</span>
+                    <span className="text-teal-400 font-mono normal-case">Live Mic Input</span>
                   </div>
                   <textarea
                     value={customInput}
@@ -377,10 +427,10 @@ export default function Home() {
                 </div>
 
                 {/* Gujarati Synthesized Output */}
-                <div className="bg-gradient-to-br from-teal-950/40 to-slate-950 p-4 rounded-xl border border-teal-500/30 space-y-1.5">
+                <div className="bg-teal-950/20 p-4 rounded-xl border border-teal-500/20 space-y-1.5">
                   <div className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-teal-400 font-bold">
                     <Sparkles className="w-3.5 h-3.5" />
-                    <span>Real-Time Gujarati Subtitle (ગુજરાતી સ્ક્રિપ્ટ)</span>
+                    <span>Gujarati subtitle for students (ગુજરાતી)</span>
                   </div>
                   <p className="text-teal-100 font-bold text-base leading-relaxed">
                     "{translatedGujarati}"
@@ -391,15 +441,15 @@ export default function Home() {
                 <div>
                   <p className="text-xs font-bold text-slate-400 mb-2 flex items-center gap-1.5">
                     <Terminal className="w-3.5 h-3.5 text-teal-400" />
-                    Active Linguistic ISL Gloss Compiler:
+                    Sign Language tokens being generated:
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {ISL_GESTURES[activeGestureKey].tokens.map((tok, i) => (
                       <span
                         key={i}
-                        className="px-2.5 py-1 bg-slate-950 border border-teal-500/40 text-teal-300 rounded-lg text-xs font-mono font-bold shadow-sm"
+                        className="px-2.5 py-1 bg-slate-950 border border-teal-500/30 text-teal-300 rounded-lg text-xs font-mono font-bold shadow-sm"
                       >
-                        [{tok}]
+                        {tok}
                       </span>
                     ))}
                   </div>
@@ -408,7 +458,7 @@ export default function Home() {
                 {/* Gesture Selector Palette */}
                 <div>
                   <p className="text-xs font-bold text-slate-400 mb-2">
-                    Select Kinematic Sign Target:
+                    Show sign for:
                   </p>
                   <div className="grid grid-cols-4 gap-2">
                     {Object.keys(ISL_GESTURES).map((k) => (
@@ -426,18 +476,20 @@ export default function Home() {
                     ))}
                   </div>
                 </div>
+
               </div>
 
               {/* Action Button */}
               <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
                 <button
                   onClick={handleCustomTranslate}
-                  className="px-5 py-2.5 bg-gradient-to-r from-teal-500 to-emerald-500 hover:opacity-95 text-slate-950 rounded-xl font-bold text-xs shadow-lg shadow-teal-500/20 flex items-center gap-2"
+                  className="px-5 py-2.5 bg-teal-500 hover:bg-teal-400 text-slate-950 rounded-xl font-bold text-xs shadow-sm shadow-teal-500/20 flex items-center gap-2 transition-colors"
                 >
-                  <Mic className="w-4 h-4" /> Synthesize Classroom Speech
+                  <Mic className="w-4 h-4" /> Translate & Show Sign
                 </button>
-                <span className="text-[11px] text-slate-400 font-mono">Latency: 14ms</span>
+                <span className="text-[11px] text-slate-500 font-mono">Response: 14ms</span>
               </div>
+
             </div>
 
             {/* Right: Real 3D Joint Canvas + Edge Vision */}
@@ -448,10 +500,10 @@ export default function Home() {
                   <div>
                     <h3 className="font-bold text-sm text-slate-100 flex items-center gap-2">
                       <Zap className="w-4 h-4 text-teal-400" />
-                      3D Kinematic Skeletal Avatar (દ્રશ્ય અવતાર)
+                      ISL Sign Avatar
                     </h3>
-                    <p className="text-[11px] text-slate-400 font-mono">
-                      Canvas-Rendered Articulated 21-Joint Skeletal Mesh
+                    <p className="text-[11px] text-slate-500 mt-0.5">
+                      Animated hand showing the correct Indian Sign Language gesture
                     </p>
                   </div>
 
@@ -481,7 +533,7 @@ export default function Home() {
                     className="w-full h-full object-contain"
                   />
                   <div className="absolute bottom-2 left-3 text-[10px] font-mono text-slate-400 bg-slate-950/80 px-2 py-1 rounded border border-slate-800">
-                    Skeletal Joint Vectors: [Active: {ISL_GESTURES[activeGestureKey].eng}]
+                    Now showing: {ISL_GESTURES[activeGestureKey].eng} — {ISL_GESTURES[activeGestureKey].guj}
                   </div>
                 </div>
               </div>
@@ -491,12 +543,17 @@ export default function Home() {
                 <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
                   <div className="flex items-center gap-2">
                     <Video className="w-4 h-4 text-emerald-400" />
-                    <h3 className="font-bold text-sm text-slate-100">
-                      Student Edge Camera (MediaPipe Live Pipeline)
-                    </h3>
+                    <div>
+                      <h3 className="font-bold text-sm text-slate-100">
+                        Student Camera — Sign Recognition
+                      </h3>
+                      <p className="text-[11px] text-slate-500 mt-0.5">
+                        AI reads the student's hand and confirms they signed correctly
+                      </p>
+                    </div>
                   </div>
-                  <span className="text-[10px] px-2.5 py-0.5 bg-emerald-950 text-emerald-300 border border-emerald-800 rounded-full font-mono font-bold">
-                    Confidence: {classificationConfidence}%
+                  <span className="text-[10px] px-2.5 py-0.5 bg-emerald-950/60 text-emerald-300 border border-emerald-800/50 rounded-full font-mono font-bold">
+                    {classificationConfidence}% accurate
                   </span>
                 </div>
 
@@ -552,23 +609,25 @@ export default function Home() {
             {/* Bayesian Knowledge Tracing Probability Meters */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
-                { label: "1. Language (શબ્દભંડોળ)", prob: bktProbabilities.language, color: "text-indigo-400" },
-                { label: "2. Recall (સ્મૃતિ)", prob: bktProbabilities.recall, color: "text-teal-400" },
-                { label: "3. Concept (સમજણ)", prob: bktProbabilities.concept, color: "text-amber-400" },
-                { label: "4. Application (પ્રયોગ)", prob: bktProbabilities.application, color: "text-rose-400" }
+                { label: "Language", sub: "શબ્દભંડોળ", prob: bktProbabilities.language, color: "text-indigo-400", bar: "bg-indigo-400" },
+                { label: "Recall", sub: "સ્મૃતિ", prob: bktProbabilities.recall, color: "text-teal-400", bar: "bg-teal-400" },
+                { label: "Concept", sub: "સમજણ", prob: bktProbabilities.concept, color: "text-amber-400", bar: "bg-amber-400" },
+                { label: "Application", sub: "પ્રયોગ", prob: bktProbabilities.application, color: "text-rose-400", bar: "bg-rose-400" }
               ].map((p, i) => (
-                <div key={i} className="bg-slate-900/80 border border-slate-800 p-4 rounded-xl backdrop-blur space-y-1">
-                  <p className="text-[11px] font-bold text-slate-400 truncate">{p.label}</p>
+                <div key={i} className="bg-slate-900/80 border border-slate-800 p-4 rounded-xl backdrop-blur space-y-2">
+                  <div>
+                    <p className="text-xs font-bold text-slate-200">{p.label}</p>
+                    <p className="text-[11px] text-slate-500">{p.sub}</p>
+                  </div>
                   <div className="flex items-baseline justify-between">
-                    <span className={`text-xl font-black font-mono ${p.color}`}>
+                    <span className={`text-2xl font-black font-mono ${p.color}`}>
                       {(p.prob * 100).toFixed(0)}%
                     </span>
-                    <span className="text-[10px] font-mono text-slate-500">P(Mastery)</span>
+                    <span className="text-[10px] text-slate-500">Mastery</span>
                   </div>
-                  {/* Progress Line */}
                   <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
                     <div
-                      className="bg-teal-400 h-full transition-all duration-500"
+                      className={`${p.bar} h-full transition-all duration-500`}
                       style={{ width: `${p.prob * 100}%` }}
                     />
                   </div>
@@ -581,8 +640,8 @@ export default function Home() {
               <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-7 shadow-2xl backdrop-blur space-y-6">
                 <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-800">
                   <div>
-                    <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/30">
-                      Cognitive Parameter: CONCEPT CAUSALITY
+                    <span className="text-xs font-semibold px-3 py-1 rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/25">
+                      Water Cycle — Concept Understanding
                     </span>
                     <h2 className="text-xl font-bold text-white mt-2">
                       Question {qIndex + 1} of 4: "Why does vapor rise when water touches heat?"
@@ -599,36 +658,34 @@ export default function Home() {
                         ? "bg-rose-950/80 text-rose-300 border-rose-600 animate-pulse"
                         : "bg-slate-950 text-slate-300 border-slate-800"
                     }`}>
-                      ⏱️ Hesitation: {latencySec}s
+                      ⏱ Hesitation: {latencySec}s
                     </div>
                     <div className="px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-300 font-semibold">
-                      ❌ Errors: {errorCount}
+                      ✕ Errors: {errorCount}
                     </div>
                   </div>
                 </div>
 
                 {/* 🚨 DYNAMIC BREAKDOWN MODE (AUTO-TRIGGERED) */}
                 {breakdownActive && (
-                  <div className="bg-gradient-to-r from-amber-950/40 via-slate-900 to-slate-900 border-2 border-amber-500/70 rounded-xl p-5 space-y-4 animate-in fade-in duration-300 shadow-2xl shadow-amber-500/10">
+                  <div className="bg-amber-950/20 border border-amber-500/50 rounded-xl p-5 space-y-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2 text-amber-400 font-bold text-sm">
-                        <AlertTriangle className="w-5 h-5 animate-bounce" />
-                        <span>
-                          🚨 BREAKDOWN SCAFFOLDING ACTIVE (Trigger: Hesitation &gt; 8s or Errors &gt; 1)
-                        </span>
+                        <AlertTriangle className="w-5 h-5" />
+                        <span>Adaptive Support Activated</span>
                       </div>
-                      <span className="text-[10px] font-mono px-2.5 py-0.5 bg-amber-500/20 text-amber-300 border border-amber-500/40 rounded-full font-bold">
-                        Pedagogical Adaptation Triggered
+                      <span className="text-[10px] font-bold px-2.5 py-0.5 bg-amber-500/15 text-amber-300 border border-amber-500/30 rounded-full">
+                        AI is slowing down to help
                       </span>
                     </div>
 
                     <p className="text-xs text-slate-300">
-                      The cognitive model detected struggle. Decomposing concept into <strong>Micro-Step Visual Actions</strong> and lowering avatar playback speed to <strong>0.5x</strong>.
+                      The AI detected the student is struggling. Breaking the concept into <strong>smaller visual steps</strong> and slowing the avatar to <strong>0.5× speed</strong>.
                     </p>
 
-                    <div className="bg-slate-950/90 p-4 rounded-xl border border-amber-500/30 space-y-2">
+                    <div className="bg-slate-950/90 p-4 rounded-xl border border-amber-500/20 space-y-2">
                       <p className="text-xs font-bold text-amber-300 uppercase tracking-wide">
-                        💡 Step-by-Step Micro Action (પગલાંવાર સમજૂતી):
+                        💡 Step-by-step guide (પગલાંવાર સમજૂતી):
                       </p>
                       <div className="space-y-1.5 text-xs text-slate-200">
                         <p className="flex items-center gap-2">
@@ -644,30 +701,32 @@ export default function Home() {
                   </div>
                 )}
 
+
                 {/* Interaction Buttons */}
                 <div className="pt-4 border-t border-slate-800 flex flex-wrap items-center justify-between gap-4">
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => submitQuiz(false)}
-                      className="px-4 py-2.5 bg-rose-950/60 hover:bg-rose-900 text-rose-300 border border-rose-700/80 rounded-xl text-xs font-bold transition-all"
+                      className="px-4 py-2.5 bg-rose-950/50 hover:bg-rose-900/60 text-rose-300 border border-rose-700/60 rounded-xl text-xs font-bold transition-all"
                     >
-                      Simulate Mistake Sign
+                      Mark as Wrong Answer
                     </button>
                     <button
                       onClick={() => setBreakdownActive(!breakdownActive)}
                       className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded-xl text-xs font-bold transition-all"
                     >
-                      Toggle Breakdown Mode
+                      Toggle Support Mode
                     </button>
                   </div>
 
                   <button
                     onClick={() => submitQuiz(true)}
-                    className="px-6 py-2.5 bg-gradient-to-r from-teal-500 to-emerald-500 hover:opacity-95 text-slate-950 rounded-xl text-sm font-extrabold shadow-lg shadow-teal-500/20 flex items-center gap-2"
+                    className="px-6 py-2.5 bg-teal-500 hover:bg-teal-400 text-slate-950 rounded-xl text-sm font-extrabold shadow-sm shadow-teal-500/20 flex items-center gap-2 transition-colors"
                   >
-                    Confirm Sign & Advance <ArrowRight className="w-4 h-4" />
+                    Correct — Next Question <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
+
               </div>
             ) : (
               <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-8 text-center space-y-6 backdrop-blur shadow-2xl">
@@ -675,8 +734,8 @@ export default function Home() {
                   🏆
                 </div>
                 <div>
-                  <h2 className="text-2xl font-black text-white">Adaptive Evaluation Completed!</h2>
-                  <p className="text-sm text-slate-400 mt-1">Cognitive mastery stream transmitted to Teacher Dashboard.</p>
+                  <h2 className="text-2xl font-black text-white">Assessment Complete!</h2>
+                  <p className="text-sm text-slate-400 mt-1">Student results sent to the Teacher Dashboard.</p>
                 </div>
                 <button
                   onClick={() => {
@@ -686,9 +745,9 @@ export default function Home() {
                     setErrorCount(0);
                     setBreakdownActive(false);
                   }}
-                  className="px-6 py-2.5 bg-gradient-to-r from-teal-500 to-emerald-500 text-slate-950 rounded-xl font-bold text-sm"
+                  className="px-6 py-2.5 bg-teal-500 hover:bg-teal-400 text-slate-950 rounded-xl font-bold text-sm transition-colors"
                 >
-                  Restart Assessment Test
+                  Start New Assessment
                 </button>
               </div>
             )}
@@ -701,16 +760,17 @@ export default function Home() {
               <div>
                 <h2 className="text-xl font-bold text-white flex items-center gap-2">
                   <Activity className="w-5 h-5 text-cyan-400" />
-                  Live Classroom Cognitive Heatmap
+                  Class Progress Dashboard
                 </h2>
-                <p className="text-xs text-slate-400">
-                  Real-time struggle monitoring from Special Education Classroom 5B (Ahmedabad)
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Real-time support alerts — Special Education Class 5B, Ahmedabad
                 </p>
               </div>
-              <span className="text-xs px-3 py-1 bg-cyan-950 text-cyan-300 border border-cyan-800 rounded-full font-mono font-bold">
-                12 Connected Students
+              <span className="text-xs px-3 py-1 bg-cyan-950/60 text-cyan-300 border border-cyan-800/50 rounded-full font-bold">
+                12 Students Connected
               </span>
             </div>
+
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {[
